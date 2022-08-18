@@ -33,6 +33,7 @@
                 :headers="headerToken"
                 :http-request="httpRequest"
                 :on-success="handleAvatarSuccess"
+                :on-preview="handlePreview"
                 multiple>
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -1814,9 +1815,8 @@ export default {
     },
 
     handleAvatarSuccess(res) {
-      // console.log(res)
+      console.log(res.url,'res')
       this.ruleForm.muZip = res.url;
-      // this.ruleForm.coverImg = res.name;
     },
     httpRequest(param) {
       const fileObj = param.file // 相当于input里取得的files
@@ -1824,10 +1824,10 @@ export default {
       this.fd = new FormData()
       this.fd.append('muZip', fileObj)// 文件对象
       this.$message.success("上传成功")
-      // console.log(param.file,'卧室少123')
-      // console.log(fileObj)
     },
+    handlePreview(){
 
+    },
     // listTab(type){
     //   this.tabItem();
     // },
@@ -1842,7 +1842,8 @@ export default {
           this.$message.warning("请输入项目名称")
           return false;
         }
-        if(!this.ruleForm.muZip) {
+        if(!this.fileName) {
+          console.log('muZip:',this.fileName)
           this.$message.warning("请上传项目文件")
           return false;
         }
@@ -1852,8 +1853,7 @@ export default {
           this.fd.append('phone', this.ruleForm.phone)
           this.fd.append('title', this.ruleForm.title)
           this.fd.append('describes', this.ruleForm.describes)
-          this.fd.append('state', 0)
-          // let data = this.ruleForm
+          this.fd.append('state', 0);
           HTTP.post(url, this.fd, res => {
             if (res.code == 0) {
               this.dialogVisible = true;

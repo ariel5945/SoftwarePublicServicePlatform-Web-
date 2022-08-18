@@ -1,8 +1,8 @@
 <template>
   <main>
     <BannerCon class="bg-img">
-      <template v-slot:bannerTitle>检测中心检测</template>
-      <template v-slot:bannerText>Test center testing</template>
+      <template v-slot:bannerTitle>自助在线检测</template>
+      <template v-slot:bannerText>Self-Service online testing</template>
     </BannerCon>
 
     <div class="body-con">
@@ -29,6 +29,7 @@
             <el-upload
                 class="upload-demo"
                 drag
+                auto-upload
                 action="https://admin.lyrjfwpt.cn/api/common/uploadZipFile"
                 :headers="headerToken"
                 :http-request="httpRequest"
@@ -40,27 +41,26 @@
             </el-upload>
             <div class="updata-img">
               <img src="./../assets/image/rjjc/updata.png" alt="">
-              <span>点击上传</span>
+              <span>上传文件</span>
             </div>
             <div class="gif-img">
               <img src="./../assets/image/rjjc/jc.gif" alt="">
             </div>
-
             <p>文件格式为:ZIP</p>
             <span>{{ fileName }}</span>
           </div>
         </div>
 
-        <div class="tijiao-btn" @click="submitForm('ruleForm')">提交检测
+        <div class="tijiao-btn" @click="submitForm('ruleForm') ">提交检测
         </div>
-
       </div>
 
-
+      <!-- 项目检测 -->
       <el-dialog
           :visible.sync="dialogVisible"
           :lock-scroll="false"
           width="60%"
+          :modal="false"
           :before-close="handleClose">
         <div class="result-body">
           <div class="result-con">{{ resultNum }}</div>
@@ -93,16 +93,10 @@
             </div>
           </div>
         </div>
-
-
       </el-dialog>
-
       <div v-show="tabId===1">
-
         <div class="zizhu-con">
-
           <div class="jc-class">
-            <!--jc-center-bg-->
             <img class="center-img-1" src="./../assets/image/rjjc/jc-center1.png">
             <img class="center-img-2" src="./../assets/image/rjjc/jc-center2.png">
             <img class="center-img-3" src="./../assets/image/rjjc/jc-center-bg.png">
@@ -203,7 +197,8 @@
                   </div>
                 </div>
                 <div v-else>
-                  <input class="zd-input" type="text" v-model="tabIndexVal">
+                  <textarea class="dm-textarea" v-model="tabIndexVal" cols="2" rows="1" resize="none"></textarea>
+                  <!-- <input class="zd-input" type="text" v-model="tabIndexVal"> -->
                 </div>
               </div>
               <div class="jc-item-option" v-else-if="tabItem === 1">
@@ -1210,7 +1205,6 @@
         <!--  <el-button type="primary" @click="jiance()">提交检测</el-button>-->
         <!--</div>-->
       </div>
-
     </div>
   </main>
 </template>
@@ -1234,6 +1228,9 @@ export default {
       formData: [
         {
           title: "代码校验", list: [
+            {title: "产品名称"},
+            {title: "公司名称"},
+            {title: "项目简介"},
             {title: "代码是否正常启动"},
             {title: "代码格式是否规范"},
             {title: "代码启动后是否崩溃"},
@@ -1542,6 +1539,9 @@ export default {
         // },
         {
           title: "代码校验", list: [
+            {title: "产品名称",type: 1},
+            {title: "公司名称",type: 1},
+            {title: "项目简介",type: 1},
             {title: "代码是否正常启动", type: 0},
             {title: "代码格式是否规范", type: 0},
             {title: "代码启动后是否崩溃", type: 0},
@@ -1680,15 +1680,18 @@ export default {
       formData8: {},
       formData9: {},
       formData10: {},
+      formData11: {},
+      formData12: {},
+      formData13: {},
 
       ruleForm: {},
       fileName: "",
       fd: {},
       rules: {},
-
+      fileObj:{},
       grade: 100,
       resultNum: 0,
-
+      state:0,
       tabIndex1: 0,
       tabIndex2: 0,
       tabIndex3: 0,
@@ -1696,6 +1699,7 @@ export default {
       tabIndex5: 0,
 
       tabIndexVal: "",
+      
     }
   },
   methods: {
@@ -1789,27 +1793,29 @@ export default {
       } else {
         this.tabId = type;
         let url = "/api/datection/select";
-        let data = {};
+        let data = {
+        };
         HTTP.get(url, data, res => {
-          if(res.data[0].rate < 1){
-            this.resultNum = res.data[0].rate*100;
-            this.dialogVisible = true;
-            let dataList = this.formData[0].list.concat(this.formData[1].list).concat(this.formData[2].list).concat(this.formData[3].list).concat(this.formData[4].list);
-            setTimeout(()=>{
-              for(let i = 0;i<dataList.length;i++){
-                that.$refs.scheduleHtml.innerHTML += `<p>${dataList[i].title}</p>`
-              }
-            },500)
-
-            this.getDetectionList();
-
+          if(res.code === 0){
+            console.log('select')
+            this.state = res.data[0].state;
+            console.log('sta:',res.data[0].state)
+            if(res.data[0].rate < 1){
+              this.resultNum = res.data[0].rate*100;
+              this.dialogVisible = true;
+              let dataList = this.formData[0].list.concat(this.formData[1].list).concat(this.formData[2].list).concat(this.formData[3].list).concat(this.formData[4].list);
+              setTimeout(()=>{
+                for(let i = 0;i<dataList.length;i++){
+                  that.$refs.scheduleHtml.innerHTML += `<p>${dataList[i].title}</p>`
+                }
+              },500)
+              this.getDetectionList();
+            }
           }
         }, false)
       }
 
     },
-
-
     handleClose() {
       this.dialogVisible = true;
     },
@@ -1818,12 +1824,14 @@ export default {
       console.log(res.url,'res')
       this.ruleForm.muZip = res.url;
     },
+
     httpRequest(param) {
-      const fileObj = param.file // 相当于input里取得的files
+      this.fileObj= param.file // 相当于input里取得的files
       this.fileName = param.file.name;
-      this.fd = new FormData()
-      this.fd.append('muZip', fileObj)// 文件对象
-      this.$message.success("上传成功")
+      this.fd = new FormData() //创建表单
+      this.fd.append('muZip', this.fileObj)// 文件添加到表单对象
+      // this.$message.success("上传成功")
+      console.log('fileObj:',this.fileObj)
     },
     handlePreview(){
 
@@ -1834,6 +1842,7 @@ export default {
 
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
+
         if(!this.ruleForm.phone) {
           this.$message.warning("请输入您的联系方式")
           return false;
@@ -1843,19 +1852,22 @@ export default {
           return false;
         }
         if(!this.fileName) {
-          console.log('muZip:',this.fileName)
           this.$message.warning("请上传项目文件")
           return false;
         }
 
         if (valid) {
           let url = "/api/datection/upload";
+          this.fd.append('muZip', this.fileObj)
+          // this.fd.append('file', this.fileName)
           this.fd.append('phone', this.ruleForm.phone)
           this.fd.append('title', this.ruleForm.title)
           this.fd.append('describes', this.ruleForm.describes)
-          this.fd.append('state', 0);
+          this.fd.append('state', this.state);
           HTTP.post(url, this.fd, res => {
             if (res.code == 0) {
+              console.log('state:',this.state)
+              console.log('upload')
               this.dialogVisible = true;
               this.getDetectionList()
             } else {
@@ -1870,29 +1882,19 @@ export default {
         }
       });
     },
+   
     jiance() {
       if (!this.tabIndexVal) {
         return false;
       }
       this.$message.success("提交成功");
-      // location.reload()
-      // this.$router.push("/")
     },
 
     getDetectionList() {
-
-      // console.log(dataList,111111)
       let ccet = setInterval(() => {
         if (this.resultNum < 100) {
           this.resultNum += 1;
-
-
-          // if(this.resultNum){
-          //   // this.formData
-          // }
-
           if (this.$refs.scheduleHtml) {
-
             this.$refs.scheduleHtml.innerHTML += `<p>${this.formData[0].list[this.resultNum].title}</p>`
             if (this.resultNum < 10) {
               this.$refs.scheduleHtml.innerHTML += `<p>${this.formData[0].list[this.resultNum].title}</p>`
@@ -1910,8 +1912,6 @@ export default {
               this.$refs.scheduleHtml.innerHTML += `<p>${this.formData[4].list[this.resultNum - 70].title}</p>`
               // console.log(this.formData[0][this.resultNum])
             }
-
-
             this.$refs.scheduleHtml.scrollTo({
               top: this.resultNum * 24,
               behavior: "smooth"
@@ -2382,20 +2382,24 @@ export default {
   font-size: .16rem;
 }
 
-.zd-textarea {
+.zd-textarea ,.dm-textarea{
   background: transparent;
   border: 1px solid;
   border-image: linear-gradient(-36deg, rgba(0, 156, 255, 0.94), rgba(0, 156, 255, 0.94)) 2 2;
   width: 100%;
-  height: 1.8rem;
   line-height: .2rem;
   color: #FFFFFF;
   padding: .1rem .1rem;
   outline: none;
   font-size: .16rem;
 }
-
-
+.zd-textarea{
+  height: 1.8rem;
+}
+.dm-textarea{
+  min-width: 100%;
+  max-height: .5rem;
+}
 .tab-list {
   width: 100%;
   margin-bottom: .2rem;

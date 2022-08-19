@@ -140,11 +140,11 @@
               <h6>Software Training</h6>
               <div class="page3-jump">
                 <div>
-                  <h5>{{ trainingNumber }} <span>+</span></h5>
+                  <h5>{{ trainingSubjectNumber }}<span>+</span></h5>
                   <p>精品课程</p>
                 </div>
                 <div>
-                  <h5>{{ trainingSubjectNumber }} <span>+</span></h5>
+                  <h5> {{ trainingNumber }} <span>+</span></h5>
                   <p>在线题库</p>
                 </div>
 

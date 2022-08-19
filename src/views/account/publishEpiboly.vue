@@ -33,7 +33,8 @@
           <div class="right-btn" v-if="item.status == 0">待审核</div>
           <div class="right-btn-w" v-else-if="item.status == 1" @click="getRenList(item.id)">查看申请</div>
           <div class="right-btn-wc" v-else-if="item.status == 2">已完成</div>
-          <div class="right-btn-text" @click="jumpBtn(item.epibolyId)">查看详情</div>
+          <!-- epibolyId -->
+          <div class="right-btn-text" @click="jumpBtn(item.id)">查看详情</div>
         </div>
 
       </div>

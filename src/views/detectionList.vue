@@ -30,6 +30,7 @@
                 class="upload-demo"
                 drag
                 auto-upload
+                accept=".zip"
                 action="https://admin.lyrjfwpt.cn/api/common/uploadZipFile"
                 :headers="headerToken"
                 :http-request="httpRequest"
@@ -57,8 +58,11 @@
 
       <!-- 项目检测 -->
       <el-dialog
+          :append-to-body="true"
+          :modal-append-to-body="false"
           :visible.sync="dialogVisible"
-          :lock-scroll="false"
+          :close-on-click-modal="false"
+          :lock-scroll="true"
           width="60%"
           :modal="false"
           :before-close="handleClose">
@@ -186,12 +190,12 @@
               <!--用户输入 sta **************************************************************-->
               <div class="jc-item-option" v-if="tabItem === 0">
                 <div v-if="selectList[tabItem].list[tabIndex1].type===0">
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 1}" @click="tabIndexVal = 1">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '是'}" @click="tabIndexVal = '是'">
                     <div></div>
                     是
                   </div>
                   <div style="width: .6rem;opacity: 0;"></div>
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 2}" @click="tabIndexVal = 2">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '否'}" @click="tabIndexVal = '否'">
                     <div></div>
                     否
                   </div>
@@ -203,12 +207,12 @@
               </div>
               <div class="jc-item-option" v-else-if="tabItem === 1">
                 <div v-if="selectList[tabItem].list[tabIndex2].type===0">
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 1}" @click="tabIndexVal = 1">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '是'}" @click="tabIndexVal = '是'">
                     <div></div>
                     是
                   </div>
                   <div style="width: .6rem;opacity: 0;"></div>
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 2}" @click="tabIndexVal = 2">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '否'}" @click="tabIndexVal = '否'">
                     <div></div>
                     否
                   </div>
@@ -219,12 +223,12 @@
               </div>
               <div class="jc-item-option" v-else-if="tabItem === 2">
                 <div v-if="selectList[tabItem].list[tabIndex3].type===0">
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 1}" @click="tabIndexVal = 1">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '是'}" @click="tabIndexVal = '是'">
                     <div></div>
                     是
                   </div>
                   <div style="width: .6rem;opacity: 0;"></div>
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 2}" @click="tabIndexVal = 2">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '否'}" @click="tabIndexVal = '否'">
                     <div></div>
                     否
                   </div>
@@ -235,12 +239,12 @@
               </div>
               <div class="jc-item-option" v-else-if="tabItem === 3">
                 <div v-if="selectList[tabItem].list[tabIndex4].type===0">
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 1}" @click="tabIndexVal = 1">
+                 <div :class="{'tabIndexVal-con': tabIndexVal === '是'}" @click="tabIndexVal = '是'">
                     <div></div>
                     是
                   </div>
                   <div style="width: .6rem;opacity: 0;"></div>
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 2}" @click="tabIndexVal = 2">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '否'}" @click="tabIndexVal = '否'">
                     <div></div>
                     否
                   </div>
@@ -251,12 +255,12 @@
               </div>
               <div class="jc-item-option" v-else>
                 <div v-if="selectList[tabItem].list[tabIndex5].type===0">
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 1}" @click="tabIndexVal = 1">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '是'}" @click="tabIndexVal = '是'">
                     <div></div>
                     是
                   </div>
                   <div style="width: .6rem;opacity: 0;"></div>
-                  <div :class="{'tabIndexVal-con': tabIndexVal === 2}" @click="tabIndexVal = 2">
+                  <div :class="{'tabIndexVal-con': tabIndexVal === '否'}" @click="tabIndexVal = '否'">
                     <div></div>
                     否
                   </div>
@@ -268,43 +272,47 @@
               <!--用户输入 End ***************************************************************-->
 
               <div class="jc-option-con" v-if="tabItem===0">
-                <div @click="getUserOptinon(1)">上一题</div>
-                <div v-if="tabIndex1 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一题</div>
-                <div v-else class="end-btn" @click="jiance()">测试结束</div>
-                <div v-if="tabItem<=4 && tabIndex1 === selectList[tabItem].list.length-1" @click="tabItem += 1"
-                     style="background-color: #3291F8">下一项
+                <!-- <div @click="getUserOptinon(1)">上一题</div> -->
+                <div v-if="tabIndex1 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一项</div>
+                <!-- <div v-else class="end-btn" @click="jiance()">查看报告</div> -->
+                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish">
+                
                 </div>
+                <div v-if="tabItem<=4 && tabIndex1Finish && (!(tabIndex5Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish))" style="background-color: #3291F8"  @click="tabItem += 1">下一类目</div>
               </div>
+              <!-- 第二组 -->
               <div class="jc-option-con" v-if="tabItem===1">
-                <div @click="getUserOptinon(1)">上一题</div>
-                <div v-if="tabIndex2 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一题</div>
-                <div v-else class="end-btn" @click="jiance()">测试结束</div>
-                <div v-if="tabItem<=4 && tabIndex2 === selectList[tabItem].list.length-1" @click="tabItem += 1"
-                     style="background-color: #3291F8">下一项
+                <!-- <div @click="getUserOptinon(1)">上一题</div> -->
+                <div v-if="tabIndex2 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一项</div>
+                <!-- <div v-else class="end-btn" @click="jiance()">查看报告</div> -->
+                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish">
+                
                 </div>
+                <div v-if="tabItem<=4 && tabIndex2Finish && (!(tabIndex1Finish && tabIndex5Finish && tabIndex3Finish && tabIndex4Finish))" style="background-color: #3291F8"  @click="tabItem += 1">下一类目</div>
               </div>
-              <div class="jc-option-con" v-if="tabItem===2">
-                <div @click="getUserOptinon(1)">上一题</div>
-                <div v-if="tabIndex3 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一题</div>
-                <div v-else class="end-btn" @click="jiance()">测试结束</div>
-                <div v-if="tabItem<=4 && tabIndex3 === selectList[tabItem].list.length-1" @click="tabItem += 1"
-                     style="background-color: #3291F8">下一项
-                </div>
+              <!-- 第三组 -->
+               <div class="jc-option-con" v-if="tabItem===2">
+                <!-- <div @click="getUserOptinon(1)">上一题</div> -->
+                <div v-if="tabIndex3 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一项</div>
+                <!-- <div v-else class="end-btn" @click="jiance()">查看报告</div> -->
+                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish"></div>
+                <div v-if="tabItem<=4 && tabIndex3Finish && (!(tabIndex1Finish && tabIndex2Finish && tabIndex5Finish && tabIndex4Finish))" style="background-color: #3291F8"  @click="tabItem += 1">下一类目</div>
               </div>
+              <!-- 第四组 -->
               <div class="jc-option-con" v-if="tabItem===3">
-                <div @click="getUserOptinon(1)">上一题</div>
-                <div v-if="tabIndex4 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一题</div>
-                <div v-else class="end-btn" @click="jiance()">测试结束</div>
-                <div v-if="tabItem<=4 && tabIndex4 === selectList[tabItem].list.length-1" @click="tabItem += 1"
-                     style="background-color: #3291F8">下一项
-                </div>
+                <!-- <div @click="getUserOptinon(1)">上一题</div> -->
+                <div v-if="tabIndex4 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一项</div>
+                <!-- <div v-else class="end-btn" @click="jiance()">查看报告</div> -->
+                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish"></div>
+                <div v-if="tabItem<=4 && tabIndex4Finish && (!(tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex5Finish))" style="background-color: #3291F8"  @click="tabItem += 1">下一类目</div>
               </div>
+              <!-- 第五组 -->
               <div class="jc-option-con" v-if="tabItem===4">
-                <div @click="getUserOptinon(1)">上一题</div>
-                <div v-if="tabIndex5 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一题</div>
-                <div v-else class="end-btn" @click="jiance()">测试结束</div>
-                <div v-if="tabItem<=4 && tabIndex5 === selectList[tabItem].list.length-1" @click="tabItem += 1">下一项
-                </div>
+                <!-- <div @click="getUserOptinon(1)">上一题</div> -->
+                <div v-if="tabIndex5 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一项</div>
+                <!-- <div v-else class="end-btn" @click="jiance()">查看报告</div> -->
+                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish" @click="jiance()">查看报告</div>
+                <div v-if="tabItem<=4 && tabIndex5Finish && (!(tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish))" style="background-color: #3291F8" @click="tabItem = 0">下一类目</div>
               </div>
             </div>
             <div class="jindu-con">
@@ -329,7 +337,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
         <!--<div class="jif-con">-->
@@ -1219,27 +1226,45 @@ export default {
   components: {
     BannerCon,
   },
+   computed: {
+    // 判断当前每项题是否打完
+    tabIndex1Finish() {
+      return this.tabIndex1 === this.selectList[this.tabItem].list.length-1
+    },
+    tabIndex2Finish() {
+      return this.tabIndex2 === this.selectList[this.tabItem].list.length-1
+    },
+    tabIndex3Finish() {
+      return this.tabIndex3 === this.selectList[this.tabItem].list.length-1
+    },
+    tabIndex4Finish() {
+      return this.tabIndex4 === this.selectList[this.tabItem].list.length-1
+    },
+    tabIndex5Finish() {
+      return this.tabIndex5 === this.selectList[this.tabItem].list.length-1
+    },
+  },
   data() {
     return {
       tabItem: 0,
       tabId: 1,
-
-
+      paramList:'',
+      indexOf:0,
       formData: [
         {
           title: "代码校验", list: [
             {title: "产品名称"},
             {title: "公司名称"},
             {title: "项目简介"},
-            {title: "代码是否正常启动"},
-            {title: "代码格式是否规范"},
-            {title: "代码启动后是否崩溃"},
-            {title: "运行代码崩溃次数"},
-            {title: "运行代码警告数量"},
-            {title: "运行代码报错数量"},
-            {title: "是否引入第三方组件"},
-            {title: "使用第三方组件数量"},
-            {title: "配置文件是否符合规范"},
+            // {title: "代码是否正常启动"},
+            // {title: "代码格式是否规范"},
+            // {title: "代码启动后是否崩溃"},
+            // {title: "运行代码崩溃次数"},
+            // {title: "运行代码警告数量"},
+            // {title: "运行代码报错数量"},
+            // {title: "是否引入第三方组件"},
+            // {title: "使用第三方组件数量"},
+            // {title: "配置文件是否符合规范"},
           ]
         },
         {
@@ -1247,35 +1272,35 @@ export default {
             {title: "未注册用户登录是否提示该用户未注册"},
             {title: "注册输入是否检验空值"},
             {title: "注册输入是否校验正则"},
-            {title: "注册功能是否按设计流程执行"},
-            {title: "注册完成后是否进入登录"},
-            {title: "运行代码报错数量"},
-            {title: "登录输入是否校验空值"},
-            {title: "登录输入是否校验正则"},
-            {title: "登录账号、密码错误提示"},
-            {title: "忘记密码是否能够根据账号绑定信息修改密码"},
-            {title: "页面是否正常可浏览"},
-            {title: "点击公告通知是否触发响应事件"},
-            {title: "点击功能模块是否触发响应事件"},
-            {title: "是否有登录身份校验"},
-            {title: "未登录是否跳转登录页面"},
-            {title: "页面滑动是否流畅"},
-            {title: "页面效果是否正常"},
-            {title: "页面文字是否正常"},
-            {title: "跳转路由是否正常"},
-            {title: "页面数据回显是否正常"},
-            {title: "页面数据请求报错记录"},
-            {title: "数据状态变更是否正常"},
-            {title: "异常处理是否正常"},
-            {title: "空数据是否校验"},
-            {title: "加载崩溃记录"},
-            {title: "数据加载状态是否添加"},
-            {title: "定义的变量是否都被初始化"},
-            {title: "服务器是否有针对客户端发送的数据进行异常校验"},
-            {title: "对数据库的操作是否有未释放的情况"},
-            {title: "服务器端的判断逻辑是否存在功能隐患"},
-            {title: "连接的数据库环境是否正确"},
-            {title: "对数据库的操作是否有关闭操作"},
+            // {title: "注册功能是否按设计流程执行"},
+            // {title: "注册完成后是否进入登录"},
+            // {title: "运行代码报错数量"},
+            // {title: "登录输入是否校验空值"},
+            // {title: "登录输入是否校验正则"},
+            // {title: "登录账号、密码错误提示"},
+            // {title: "忘记密码是否能够根据账号绑定信息修改密码"},
+            // {title: "页面是否正常可浏览"},
+            // {title: "点击公告通知是否触发响应事件"},
+            // {title: "点击功能模块是否触发响应事件"},
+            // {title: "是否有登录身份校验"},
+            // {title: "未登录是否跳转登录页面"},
+            // {title: "页面滑动是否流畅"},
+            // {title: "页面效果是否正常"},
+            // {title: "页面文字是否正常"},
+            // {title: "跳转路由是否正常"},
+            // {title: "页面数据回显是否正常"},
+            // {title: "页面数据请求报错记录"},
+            // {title: "数据状态变更是否正常"},
+            // {title: "异常处理是否正常"},
+            // {title: "空数据是否校验"},
+            // {title: "加载崩溃记录"},
+            // {title: "数据加载状态是否添加"},
+            // {title: "定义的变量是否都被初始化"},
+            // {title: "服务器是否有针对客户端发送的数据进行异常校验"},
+            // {title: "对数据库的操作是否有未释放的情况"},
+            // {title: "服务器端的判断逻辑是否存在功能隐患"},
+            // {title: "连接的数据库环境是否正确"},
+            // {title: "对数据库的操作是否有关闭操作"},
           ]
         },
         {
@@ -1283,28 +1308,28 @@ export default {
             {title: "URL是否完整"},
             {title: "请求方法是否正确"},
             {title: "Header信息是否正确"},
-            {title: "入参内容是否正确"},
-            {title: "返回值是否正确"},
-            {title: "示例是否完整"},
-            {title: "接口命名是否规范"},
-            {title: "接口格式是否规范"},
-            {title: "字段命名是否规范"},
-            {title: "字段类型是否规范"},
-            {title: "响应状态码是否正确"},
-            {title: "接口是否有容错处理"},
-            {title: "字段是否有冗余"},
-            {title: "接口是否有鉴权"},
-            {title: "接口是否有版本区分"},
-            {title: "接口数据加密传输格式"},
-            {title: "请求次数、频率限制"},
-            {title: "接口功能是否完整"},
-            {title: "接口参数临界值是否正常"},
-            {title: "接口并发数量"},
-            {title: "接口参数校验是否正确"},
-            {title: "全部参数传入结果是否正确"},
-            {title: "部分参数传入结果是否正常"},
-            {title: "超范围参数传入结果是否提示异常"},
-            {title: "不传参结果是否提示异常"},
+            // {title: "入参内容是否正确"},
+            // {title: "返回值是否正确"},
+            // {title: "示例是否完整"},
+            // {title: "接口命名是否规范"},
+            // {title: "接口格式是否规范"},
+            // {title: "字段命名是否规范"},
+            // {title: "字段类型是否规范"},
+            // {title: "响应状态码是否正确"},
+            // {title: "接口是否有容错处理"},
+            // {title: "字段是否有冗余"},
+            // {title: "接口是否有鉴权"},
+            // {title: "接口是否有版本区分"},
+            // {title: "接口数据加密传输格式"},
+            // {title: "请求次数、频率限制"},
+            // {title: "接口功能是否完整"},
+            // {title: "接口参数临界值是否正常"},
+            // {title: "接口并发数量"},
+            // {title: "接口参数校验是否正确"},
+            // {title: "全部参数传入结果是否正确"},
+            // {title: "部分参数传入结果是否正常"},
+            // {title: "超范围参数传入结果是否提示异常"},
+            // {title: "不传参结果是否提示异常"},
           ]
         },
         {
@@ -1312,30 +1337,30 @@ export default {
             {title: "是否有防盗刷校验码"},
             {title: "页面代码是否明文显示"},
             {title: "是否引入防抖和节流"},
-            {title: "是否配置路由守卫"},
-            {title: "请求数据是否明文传输"},
-            {title: "是否引入反扒机制"},
-            {title: "是否设置HSTS强制使用HTTPS"},
-            {title: "是否使用浏览器提供的SRI防攻击"},
-            {title: "是否存在XSS漏洞"},
-            {title: "是否存在CSRF漏洞"},
-            {title: "是否存在SSRF漏洞"},
-            {title: "文件上传是否存在漏洞"},
-            {title: "是否存在代码注入漏洞"},
-            {title: "是否存在命令注入漏洞"},
-            {title: "是否存在XXE漏洞"},
-            {title: "是否存在文件读取权限漏洞"},
-            {title: "是否有sql注入漏洞"},
-            {title: "是否有命令注入漏洞"},
-            {title: "是否有文件操作漏洞"},
-            {title: "异常宕机数据是否丢失"},
-            {title: "是否存在缓存穿透"},
-            {title: "承载最大并发量"},
-            {title: "数据库访问临界值"},
-            {title: "服务器是否有缓存机制"},
-            {title: "服务器的负载均衡是否合理"},
-            {title: "服务器连接的是否有超时设置"},
-            {title: "网络请求是否使用的是内网IP"},
+            // {title: "是否配置路由守卫"},
+            // {title: "请求数据是否明文传输"},
+            // {title: "是否引入反扒机制"},
+            // {title: "是否设置HSTS强制使用HTTPS"},
+            // {title: "是否使用浏览器提供的SRI防攻击"},
+            // {title: "是否存在XSS漏洞"},
+            // {title: "是否存在CSRF漏洞"},
+            // {title: "是否存在SSRF漏洞"},
+            // {title: "文件上传是否存在漏洞"},
+            // {title: "是否存在代码注入漏洞"},
+            // {title: "是否存在命令注入漏洞"},
+            // {title: "是否存在XXE漏洞"},
+            // {title: "是否存在文件读取权限漏洞"},
+            // {title: "是否有sql注入漏洞"},
+            // {title: "是否有命令注入漏洞"},
+            // {title: "是否有文件操作漏洞"},
+            // {title: "异常宕机数据是否丢失"},
+            // {title: "是否存在缓存穿透"},
+            // {title: "承载最大并发量"},
+            // {title: "数据库访问临界值"},
+            // {title: "服务器是否有缓存机制"},
+            // {title: "服务器的负载均衡是否合理"},
+            // {title: "服务器连接的是否有超时设置"},
+            // {title: "网络请求是否使用的是内网IP"},
           ]
         },
         {
@@ -1343,18 +1368,18 @@ export default {
             {title: "内存利用率峰值"},
             {title: "磁盘I/O峰值"},
             {title: "网络带宽"},
-            {title: "并发用户数量"},
-            {title: "同时在线用户数量"},
-            {title: "平均响应时间"},
-            {title: "事务成功率"},
-            {title: "超时错误率"},
-            {title: "LCP-视窗内最大内容的渲染时间"},
-            {title: "FID-用户第一次页面交互到浏览器实际上处理时间的时间"},
-            {title: "CLS-测量在页面的整个生命周期中发生意外布局的总和"},
-            {title: "FCP-打开浏览器第一个DOS消耗时间"},
-            {title: "SpeedIndex（SI）加载过程视觉呈现速度"},
-            {title: "TTI-页面完全可交互耗费时间"},
-            {title: "TBT-加载过程阻塞用户操作时长"},
+            // {title: "并发用户数量"},
+            // {title: "同时在线用户数量"},
+            // {title: "平均响应时间"},
+            // {title: "事务成功率"},
+            // {title: "超时错误率"},
+            // {title: "LCP-视窗内最大内容的渲染时间"},
+            // {title: "FID-用户第一次页面交互到浏览器实际上处理时间的时间"},
+            // {title: "CLS-测量在页面的整个生命周期中发生意外布局的总和"},
+            // {title: "FCP-打开浏览器第一个DOS消耗时间"},
+            // {title: "SpeedIndex（SI）加载过程视觉呈现速度"},
+            // {title: "TTI-页面完全可交互耗费时间"},
+            // {title: "TBT-加载过程阻塞用户操作时长"},
           ]
         },
       ],
@@ -1365,192 +1390,20 @@ export default {
       },
 
       selectList: [
-        // {
-        //   title: "代码校验", list: [
-        //     {
-        //       title: "前端部分", list: [
-        //         {title: "代码是否正常启动"},
-        //         {title: "代码格式是否规范"},
-        //         {title: "代码启动后是否崩溃"},
-        //         {title: "运行代码崩溃次数"},
-        //         {title: "运行代码警告数量"},
-        //         {title: "运行代码报错数量"},
-        //         {title: "是否引入第三方组件"},
-        //         {title: "使用第三方组件数量"},
-        //         {title: "配置文件是否符合规范"},
-        //       ]
-        //     },
-        //     {
-        //       title: "服务端部分", list: [
-        //         {title: "代码是否正常启动"},
-        //         {title: "代码格式是否规范"},
-        //         {title: "代码启动后是否崩溃"},
-        //         {title: "运行代码崩溃次数"},
-        //         {title: "运行代码警告数量"},
-        //         {title: "运行代码报错数量"},
-        //         {title: "是否引入第三方组件"},
-        //         {title: "使用第三方组件数量"},
-        //         {title: "配置文件是否符合规范"},
-        //       ]
-        //     },
-        //   ]
-        // },
-        // {
-        //   title: "功能测试", list: [
-        //     {title: "登录注册",list: [
-        //         {title: "未注册用户登录是否提示该用户未注册"},
-        //         {title: "注册输入是否检验空值"},
-        //         {title: "注册输入是否校验正则"},
-        //         {title: "注册功能是否按设计流程执行"},
-        //         {title: "注册完成后是否进入登录"},
-        //         {title: "运行代码报错数量"},
-        //         {title: "登录输入是否校验空值"},
-        //         {title: "登录输入是否校验正则"},
-        //         {title: "登录账号、密码错误提示"},
-        //         {title: "忘记密码是否能够根据账号绑定信息修改密码"},
-        //       ]
-        //     },
-        //     {title: "功能页面",list: [
-        //         {title: "页面是否正常可浏览"},
-        //         {title: "点击公告通知是否触发响应事件"},
-        //         {title: "点击功能模块是否触发响应事件"},
-        //         {title: "是否有登录身份校验"},
-        //         {title: "未登录是否跳转登录页面"},
-        //         {title: "页面滑动是否流畅"},
-        //         {title: "页面效果是否正常"},
-        //         {title: "页面文字是否正常"},
-        //         {title: "跳转路由是否正常"},
-        //         {title: "页面数据回显是否正常"},
-        //         {title: "页面数据请求报错记录"},
-        //         {title: "数据状态变更是否正常"},
-        //         {title: "异常处理是否正常"},
-        //         {title: "空数据是否校验"},
-        //         {title: "加载崩溃记录"},
-        //         {title: "数据加载状态是否添加"},
-        //       ]
-        //     },
-        //     {title: "服务端",list: [
-        //         {title: "定义的变量是否都被初始化"},
-        //         {title: "服务器是否有针对客户端发送的数据进行异常校验"},
-        //         {title: "对数据库的操作是否有未释放的情况"},
-        //         {title: "服务器端的判断逻辑是否存在功能隐患"},
-        //         {title: "连接的数据库环境是否正确"},
-        //         {title: "对数据库的操作是否有关闭操作"},
-        //       ]
-        //     },
-        //   ]
-        // },
-        // {
-        //   title: "接口测试", list: [
-        //     {
-        //       title: "Postman、ApiPost", list: [
-        //         {title: "URL是否完整"},
-        //         {title: "请求方法是否正确"},
-        //         {title: "Header信息是否正确"},
-        //         {title: "入参内容是否正确"},
-        //         {title: "返回值是否正确"},
-        //         {title: "示例是否完整"},
-        //         {title: "接口命名是否规范"},
-        //         {title: "接口格式是否规范"},
-        //         {title: "字段命名是否规范"},
-        //         {title: "字段类型是否规范"},
-        //         {title: "响应状态码是否正确"},
-        //         {title: "接口是否有容错处理"},
-        //         {title: "字段是否有冗余"},
-        //         {title: "接口是否有鉴权"},
-        //         {title: "接口是否有版本区分"},
-        //         {title: "接口数据加密传输格式"},
-        //         {title: "请求次数、频率限制"},
-        //         {title: "接口功能是否完整"},
-        //         {title: "接口参数临界值是否正常"},
-        //         {title: "接口并发数量"},
-        //         {title: "接口参数校验是否正确"},
-        //         {title: "全部参数传入结果是否正确"},
-        //         {title: "部分参数传入结果是否正常"},
-        //         {title: "超范围参数传入结果是否提示异常"},
-        //         {title: "不传参结果是否提示异常"},
-        //       ]
-        //     },
-        //
-        //   ]
-        // },
-        // {
-        //   title: "安全测试", list: [
-        //     {
-        //       title: "前端安全", list: [
-        //         {title: "是否有防盗刷校验码"},
-        //         {title: "页面代码是否明文显示"},
-        //         {title: "是否引入防抖和节流"},
-        //         {title: "是否配置路由守卫"},
-        //         {title: "请求数据是否明文传输"},
-        //         {title: "是否引入反扒机制"},
-        //         {title: "是否设置HSTS强制使用HTTPS"},
-        //         {title: "是否使用浏览器提供的SRI防攻击"},
-        //         {title: "是否存在XSS漏洞"},
-        //         {title: "是否存在CSRF漏洞"},
-        //         {title: "是否存在SSRF漏洞"},
-        //         {title: "文件上传是否存在漏洞"},
-        //         {title: "是否存在代码注入漏洞"},
-        //         {title: "是否存在命令注入漏洞"},
-        //         {title: "是否存在XXE漏洞"},
-        //         {title: "是否存在文件读取权限漏洞"},
-        //       ]
-        //     },
-        //     {
-        //       title: "服务端安全", list: [
-        //         {title: "是否有sql注入漏洞"},
-        //         {title: "是否有命令注入漏洞"},
-        //         {title: "是否有文件操作漏洞"},
-        //         {title: "异常宕机数据是否丢失"},
-        //         {title: "是否存在缓存穿透"},
-        //         {title: "承载最大并发量"},
-        //         {title: "数据库访问临界值"},
-        //         {title: "服务器是否有缓存机制"},
-        //         {title: "服务器的负载均衡是否合理"},
-        //         {title: "服务器连接的是否有超时设置"},
-        //         {title: "网络请求是否使用的是内网IP"},
-        //         {title: "生产服务是否与测试服务一致"},
-        //       ]
-        //     },
-        //   ]
-        // },
-        // {
-        //   title: "性能测试", list: [
-        //     {
-        //       title: "性能测试", list: [
-        //         {title: "内存利用率峰值"},
-        //         {title: "磁盘I/O峰值"},
-        //         {title: "网络带宽"},
-        //         {title: "并发用户数量"},
-        //         {title: "同时在线用户数量"},
-        //         {title: "平均响应时间"},
-        //         {title: "事务成功率"},
-        //         {title: "超时错误率"},
-        //         {title: "LCP-视窗内最大内容的渲染时间"},
-        //         {title: "FID-用户第一次页面交互到浏览器实际上处理时间的时间"},
-        //         {title: "CLS-测量在页面的整个生命周期中发生意外布局的总和"},
-        //         {title: "FCP-打开浏览器第一个DOS消耗时间"},
-        //         {title: "SpeedIndex（SI）加载过程视觉呈现速度"},
-        //         {title: "TTI-页面完全可交互耗费时间"},
-        //         {title: "TBT-加载过程阻塞用户操作时长"},
-        //       ]
-        //     },
-        //   ]
-        // },
         {
           title: "代码校验", list: [
             {title: "产品名称",type: 1},
             {title: "公司名称",type: 1},
             {title: "项目简介",type: 1},
-            {title: "代码是否正常启动", type: 0},
-            {title: "代码格式是否规范", type: 0},
-            {title: "代码启动后是否崩溃", type: 0},
-            {title: "运行代码崩溃次数", type: 1},
-            {title: "运行代码警告数量", type: 1},
-            {title: "运行代码报错数量", type: 1},
-            {title: "是否引入第三方组件", type: 0},
-            {title: "使用第三方组件数量", type: 1},
-            {title: "配置文件是否符合规范", type: 0},
+            // {title: "代码是否正常启动", type: 0},
+            // {title: "代码格式是否规范", type: 0},
+            // {title: "代码启动后是否崩溃", type: 0},
+            // {title: "运行代码崩溃次数", type: 1},
+            // {title: "运行代码警告数量", type: 1},
+            // {title: "运行代码报错数量", type: 1},
+            // {title: "是否引入第三方组件", type: 0},
+            // {title: "使用第三方组件数量", type: 1},
+            // {title: "配置文件是否符合规范", type: 0},
           ]
         },
         {
@@ -1558,35 +1411,35 @@ export default {
             {title: "未注册用户登录是否提示该用户未注册", type: 0},
             {title: "注册输入是否检验空值", type: 0},
             {title: "注册输入是否校验正则", type: 0},
-            {title: "注册功能是否按设计流程执行", type: 0},
-            {title: "注册完成后是否进入登录", type: 0},
-            {title: "运行代码报错数量", type: 0},
-            {title: "登录输入是否校验空值", type: 0},
-            {title: "登录输入是否校验正则", type: 0},
-            {title: "登录账号、密码错误提示", type: 0},
-            {title: "忘记密码是否能够根据账号绑定信息修改密码", type: 0},
-            {title: "页面是否正常可浏览", type: 0},
-            {title: "点击公告通知是否触发响应事件", type: 0},
-            {title: "点击功能模块是否触发响应事件", type: 0},
-            {title: "是否有登录身份校验", type: 0},
-            {title: "未登录是否跳转登录页面", type: 0},
-            {title: "页面滑动是否流畅", type: 0},
-            {title: "页面效果是否正常", type: 0},
-            {title: "页面文字是否正常", type: 0},
-            {title: "跳转路由是否正常", type: 0},
-            {title: "页面数据回显是否正常", type: 0},
-            {title: "页面数据请求报错数量", type: 1},
-            {title: "数据状态变更是否正常", type: 0},
-            {title: "异常处理是否正常", type: 0},
-            {title: "空数据是否校验", type: 0},
-            {title: "加载崩溃次数", type: 1},
-            {title: "数据加载状态是否添加", type: 0},
-            {title: "定义的变量是否都被初始化", type: 0},
-            {title: "服务器是否有针对客户端发送的数据进行异常校验", type: 0},
-            {title: "对数据库的操作是否有未释放的情况", type: 0},
-            {title: "服务器端的判断逻辑是否存在功能隐患", type: 0},
-            {title: "连接的数据库环境是否正确", type: 0},
-            {title: "对数据库的操作是否有关闭操作", type: 0},
+            // {title: "注册功能是否按设计流程执行", type: 0},
+            // {title: "注册完成后是否进入登录", type: 0},
+            // {title: "运行代码报错数量", type: 0},
+            // {title: "登录输入是否校验空值", type: 0},
+            // {title: "登录输入是否校验正则", type: 0},
+            // {title: "登录账号、密码错误提示", type: 0},
+            // {title: "忘记密码是否能够根据账号绑定信息修改密码", type: 0},
+            // {title: "页面是否正常可浏览", type: 0},
+            // {title: "点击公告通知是否触发响应事件", type: 0},
+            // {title: "点击功能模块是否触发响应事件", type: 0},
+            // {title: "是否有登录身份校验", type: 0},
+            // {title: "未登录是否跳转登录页面", type: 0},
+            // {title: "页面滑动是否流畅", type: 0},
+            // {title: "页面效果是否正常", type: 0},
+            // {title: "页面文字是否正常", type: 0},
+            // {title: "跳转路由是否正常", type: 0},
+            // {title: "页面数据回显是否正常", type: 0},
+            // {title: "页面数据请求报错数量", type: 1},
+            // {title: "数据状态变更是否正常", type: 0},
+            // {title: "异常处理是否正常", type: 0},
+            // {title: "空数据是否校验", type: 0},
+            // {title: "加载崩溃次数", type: 1},
+            // {title: "数据加载状态是否添加", type: 0},
+            // {title: "定义的变量是否都被初始化", type: 0},
+            // {title: "服务器是否有针对客户端发送的数据进行异常校验", type: 0},
+            // {title: "对数据库的操作是否有未释放的情况", type: 0},
+            // {title: "服务器端的判断逻辑是否存在功能隐患", type: 0},
+            // {title: "连接的数据库环境是否正确", type: 0},
+            // {title: "对数据库的操作是否有关闭操作", type: 0},
           ]
         },
         {
@@ -1594,28 +1447,28 @@ export default {
             {title: "URL是否完整", type: 0},
             {title: "请求方法是否正确", type: 0},
             {title: "Header信息是否正确", type: 0},
-            {title: "入参内容是否正确", type: 0},
-            {title: "返回值是否正确", type: 0},
-            {title: "示例是否完整", type: 0},
-            {title: "接口命名是否规范", type: 0},
-            {title: "接口格式是否规范", type: 0},
-            {title: "字段命名是否规范", type: 0},
-            {title: "字段类型是否规范", type: 0},
-            {title: "响应状态码是否正确", type: 0},
-            {title: "接口是否有容错处理", type: 0},
-            {title: "字段是否有冗余", type: 0},
-            {title: "接口是否有鉴权", type: 0},
-            {title: "接口是否有版本区分", type: 0},
-            {title: "接口数据加密传输格式", type: 0},
-            {title: "请求次数、频率限制", type: 0},
-            {title: "接口功能是否完整", type: 0},
-            {title: "接口参数临界值是否正常", type: 0},
-            {title: "接口并发数量", type: 0},
-            {title: "接口参数校验是否正确", type: 0},
-            {title: "全部参数传入结果是否正确", type: 0},
-            {title: "部分参数传入结果是否正常", type: 0},
-            {title: "超范围参数传入结果是否提示异常", type: 0},
-            {title: "不传参结果是否提示异常", type: 0},
+            // {title: "入参内容是否正确", type: 0},
+            // {title: "返回值是否正确", type: 0},
+            // {title: "示例是否完整", type: 0},
+            // {title: "接口命名是否规范", type: 0},
+            // {title: "接口格式是否规范", type: 0},
+            // {title: "字段命名是否规范", type: 0},
+            // {title: "字段类型是否规范", type: 0},
+            // {title: "响应状态码是否正确", type: 0},
+            // {title: "接口是否有容错处理", type: 0},
+            // {title: "字段是否有冗余", type: 0},
+            // {title: "接口是否有鉴权", type: 0},
+            // {title: "接口是否有版本区分", type: 0},
+            // {title: "接口数据加密传输格式", type: 0},
+            // {title: "请求次数、频率限制", type: 0},
+            // {title: "接口功能是否完整", type: 0},
+            // {title: "接口参数临界值是否正常", type: 0},
+            // {title: "接口并发数量", type: 0},
+            // {title: "接口参数校验是否正确", type: 0},
+            // {title: "全部参数传入结果是否正确", type: 0},
+            // {title: "部分参数传入结果是否正常", type: 0},
+            // {title: "超范围参数传入结果是否提示异常", type: 0},
+            // {title: "不传参结果是否提示异常", type: 0},
           ]
         },
         {
@@ -1623,30 +1476,30 @@ export default {
             {title: "是否有防盗刷校验码", type: 0},
             {title: "页面代码是否明文显示", type: 0},
             {title: "是否引入防抖和节流", type: 0},
-            {title: "是否配置路由守卫", type: 0},
-            {title: "请求数据是否明文传输", type: 0},
-            {title: "是否引入反扒机制", type: 0},
-            {title: "是否设置HSTS强制使用HTTPS", type: 0},
-            {title: "是否使用浏览器提供的SRI防攻击", type: 0},
-            {title: "是否存在XSS漏洞", type: 0},
-            {title: "是否存在CSRF漏洞", type: 0},
-            {title: "是否存在SSRF漏洞", type: 0},
-            {title: "文件上传是否存在漏洞", type: 0},
-            {title: "是否存在代码注入漏洞", type: 0},
-            {title: "是否存在命令注入漏洞", type: 0},
-            {title: "是否存在XXE漏洞", type: 0},
-            {title: "是否存在文件读取权限漏洞", type: 0},
-            {title: "是否有sql注入漏洞", type: 0},
-            {title: "是否有命令注入漏洞", type: 0},
-            {title: "是否有文件操作漏洞", type: 0},
-            {title: "异常宕机数据是否丢失", type: 0},
-            {title: "是否存在缓存穿透", type: 0},
-            {title: "承载最大并发量", type: 1},
-            {title: "数据库访问临界值", type: 1},
-            {title: "服务器是否有缓存机制", type: 0},
-            {title: "服务器的负载均衡是否合理", type: 0},
-            {title: "服务器连接的是否有超时设置", type: 0},
-            {title: "网络请求是否使用的是内网IP", type: 0},
+            // {title: "是否配置路由守卫", type: 0},
+            // {title: "请求数据是否明文传输", type: 0},
+            // {title: "是否引入反扒机制", type: 0},
+            // {title: "是否设置HSTS强制使用HTTPS", type: 0},
+            // {title: "是否使用浏览器提供的SRI防攻击", type: 0},
+            // {title: "是否存在XSS漏洞", type: 0},
+            // {title: "是否存在CSRF漏洞", type: 0},
+            // {title: "是否存在SSRF漏洞", type: 0},
+            // {title: "文件上传是否存在漏洞", type: 0},
+            // {title: "是否存在代码注入漏洞", type: 0},
+            // {title: "是否存在命令注入漏洞", type: 0},
+            // {title: "是否存在XXE漏洞", type: 0},
+            // {title: "是否存在文件读取权限漏洞", type: 0},
+            // {title: "是否有sql注入漏洞", type: 0},
+            // {title: "是否有命令注入漏洞", type: 0},
+            // {title: "是否有文件操作漏洞", type: 0},
+            // {title: "异常宕机数据是否丢失", type: 0},
+            // {title: "是否存在缓存穿透", type: 0},
+            // {title: "承载最大并发量", type: 1},
+            // {title: "数据库访问临界值", type: 1},
+            // {title: "服务器是否有缓存机制", type: 0},
+            // {title: "服务器的负载均衡是否合理", type: 0},
+            // {title: "服务器连接的是否有超时设置", type: 0},
+            // {title: "网络请求是否使用的是内网IP", type: 0},
           ]
         },
         {
@@ -1654,22 +1507,21 @@ export default {
             {title: "内存利用率峰值", type: 1},
             {title: "磁盘I/O峰值", type: 1},
             {title: "网络带宽", type: 1},
-            {title: "并发用户数量", type: 1},
-            {title: "同时在线用户数量", type: 1},
-            {title: "平均响应时间", type: 1},
-            {title: "事务成功率", type: 1},
-            {title: "超时错误率", type: 1},
-            {title: "LCP-视窗内最大内容的渲染时间", type: 1},
-            {title: "FID-用户第一次页面交互到浏览器实际上处理时间的时间", type: 1},
-            {title: "CLS-测量在页面的整个生命周期中发生意外布局的总和", type: 1},
-            {title: "FCP-打开浏览器第一个DOS消耗时间", type: 1},
-            {title: "SpeedIndex（SI）加载过程视觉呈现速度", type: 1},
-            {title: "TTI-页面完全可交互耗费时间", type: 1},
-            {title: "TBT-加载过程阻塞用户操作时长", type: 1},
+            // {title: "并发用户数量", type: 1},
+            // {title: "同时在线用户数量", type: 1},
+            // {title: "平均响应时间", type: 1},
+            // {title: "事务成功率", type: 1},
+            // {title: "超时错误率", type: 1},
+            // {title: "LCP-视窗内最大内容的渲染时间", type: 1},
+            // {title: "FID-用户第一次页面交互到浏览器实际上处理时间的时间", type: 1},
+            // {title: "CLS-测量在页面的整个生命周期中发生意外布局的总和", type: 1},
+            // {title: "FCP-打开浏览器第一个DOS消耗时间", type: 1},
+            // {title: "SpeedIndex（SI）加载过程视觉呈现速度", type: 1},
+            // {title: "TTI-页面完全可交互耗费时间", type: 1},
+            // {title: "TBT-加载过程阻塞用户操作时长", type: 1},
           ]
         },
       ],
-
       formData1: {},
       formData2: {},
       formData3: {},
@@ -1697,9 +1549,121 @@ export default {
       tabIndex3: 0,
       tabIndex4: 0,
       tabIndex5: 0,
-
       tabIndexVal: "",
-      
+
+      // 传参
+      paramTitle:'',
+      paramDescribes:'',
+      paramUserName:'',
+      param1:"",
+      param2:"",
+      param3:"",
+      param4:"",
+      param5:"",
+      param6:"",
+      param7:"",
+      param8:"",
+      param9:"",
+      param10:"",
+      param11:"",
+      param12:"",
+      param13:"",
+      param14:"",
+      param15:"",
+      param16:"",
+      param17:"",
+      param18:"",
+      param19:"",
+      param20:"",
+      param21:"",
+      param22:"",
+      param23:"",
+      param24:"",
+      param25:"",
+      param26:"",
+      param27:"",
+      param28:"",
+      param29:"",
+      param30:"",
+      param31:"",
+      param32:"",
+      param33:"",
+      param34:"",
+      param35:"",
+      param36:"",
+      param37:"",
+      param38:"",
+      param39:"",
+      param40:"",
+      param41:"",
+      param42:"",
+      param43:"",
+      param44:"",
+      param45:"",
+      param46:"",
+      param47:"",
+      param48:"",
+      param49:"",
+      param50:"",
+      param51:"",
+      param52:"",
+      param53:"",
+      param54:"",
+      param55:"",
+      param56:"",
+      param57:"",
+      param58:"",
+      param59:"",
+      param60:"",
+      param61:"",
+      param62:"",
+      param63:"",
+      param64:"",
+      param65:"",
+      param66:"",
+      param67:"",
+      param68:"",
+      param69:"",
+      param70:"",
+      param71:"",
+      param72:"",
+      param73:"",
+      param74:"",
+      param75:"",
+      param76:"",
+      param77:"",
+      param78:"",
+      param79:"",
+      param80:"",
+      param81:"",
+      param82:"",
+      param83:"",
+      param84:"",
+      param85:"",
+      param86:"",
+      param87:"",
+      param88:"",
+      param89:"",
+      param90:"",
+      param91:"",
+      param92:"",
+      param93:"",
+      param94:"",
+      param95:"",
+      param96:"",
+      param97:"",
+      param98:"",
+      param99:"",
+      param100:"",
+      param101:"",
+      param102:"",
+      param103:"",
+      param104:"",
+      param105:"",
+      param106:"",
+      param107:"",
+      param108:"",
+
     }
   },
   methods: {
@@ -1709,17 +1673,40 @@ export default {
         if (!this.tabIndexVal) {
           return false
         }
+          if(this.indexOf == 0){
+            this.paramList += "?title="+this.tabIndexVal;
+           }
+           if(this.indexOf == 1){
+            this.paramList += "&describes="+this.tabIndexVal;
+           }
+           if(this.indexOf == 2){
+            this.paramList += "&userName="+this.tabIndexVal;
+           }
+           if(this.indexOf > 2){
+            this.paramList += "&param"+(this.indexOf-2)+"="+this.tabIndexVal+'';
+           }
+           this.indexOf ++;
+            // this.paramTitle = this.tabIndexVal;
+            // this.paramDescribes = this.tabIndexVal;
+            // this.paramUserName = this.tabIndexVal;
+        console.log('paramList:',this.paramList)
+
         if (this.tabItem === 0) {
           this.selectList[this.tabItem].list[this.tabIndex1].value = this.tabIndexVal;
+           console.log('tabIndex1:',this.tabIndexVal)
+           
+           
           if (this.tabIndex1 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex1 += 1;
             if (this.tabItem === 0 && this.selectList[this.tabItem].list[this.tabIndex1].value) {
               this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex1].value;
+              
             }
           }
         } else if (this.tabItem === 1) {
           this.selectList[this.tabItem].list[this.tabIndex2].value = this.tabIndexVal;
+          console.log('tabIndex2:',this.tabIndexVal)
           if (this.tabIndex2 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex2 += 1;
@@ -1729,6 +1716,7 @@ export default {
           }
         } else if (this.tabItem === 2) {
           this.selectList[this.tabItem].list[this.tabIndex3].value = this.tabIndexVal;
+          console.log('tabIndex3:',this.tabIndexVal)
           if (this.tabIndex3 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex3 += 1;
@@ -1738,6 +1726,7 @@ export default {
           }
         } else if (this.tabItem === 3) {
           this.selectList[this.tabItem].list[this.tabIndex4].value = this.tabIndexVal;
+          console.log('tabIndex4:',this.tabIndexVal)
           if (this.tabIndex4 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex4 += 1;
@@ -1747,6 +1736,7 @@ export default {
           }
         } else if (this.tabItem === 4) {
           this.selectList[this.tabItem].list[this.tabIndex5].value = this.tabIndexVal;
+          console.log('tabIndex5:',this.tabIndexVal)
           if (this.tabIndex5 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex5 += 1;
@@ -1755,7 +1745,8 @@ export default {
             }
           }
         }
-      } else if (type === 1) {
+      } 
+      else if (type === 1) {
         if (this.tabItem === 0) {
           if (this.tabIndex1 > 0) {
             this.tabIndex1 -= 1;
@@ -1817,7 +1808,7 @@ export default {
 
     },
     handleClose() {
-      this.dialogVisible = true;
+      this.dialogVisible = false;
     },
 
     handleAvatarSuccess(res) {
@@ -1873,7 +1864,6 @@ export default {
             } else {
               this.$message.error(res.msg);
             }
-
           }, false)
           // alert('submit!');
         } else {
@@ -1885,11 +1875,27 @@ export default {
    
     jiance() {
       if (!this.tabIndexVal) {
-        return false;
-      }
-      this.$message.success("提交成功");
-    },
+        this.$message.error("还有测试没做完哦！");
+      }else{
+                 window.open("https://admin.lyrjfwpt.cn/portal/datection/exportZPdf"+this.paramList);
 
+        //  window.open("https://admin.lyrjfwpt.cn/portal/datection/exportZPdf?title=商城小程序&describes=购物车、下单、发货&userName=洛阳盛商电子商务有限公司&param1=是&param2=是&param3=是&param4=0&param5=2&param6=5&param7=是&param8=20&param9=是&param11=是&param10=是&param12=是&param13=是&param14=是&param15=是&param16=是&param17=是&param18=是&param19=是&param20=是&param21=是&param22=是&param23=是&param24=是&param25=是&param26=是&param27=是&param28=是&param29=是&param30=是&param31=是&param32=是&param33=2&param34=是&param35=是&param36=是&param37=是&param38=是&param39=是&param40=是&param41=是&param42=是&param43=是&param44=是&param45=是&param46=是&param47=是&param48=是&param49=是&param50=是&param51=是&param52=是&param53=是&param54=是&param55=是&param56=2&param57=是&param58=是&param59=10&param60=是&param61=是&param62=是&param63=是&param64=是&param65=是&param66=是&param67=是&param68=是&param69=是&param70=是&param71=是&param72=是&param73=是&param74=是&param75=是&param76=是&param77=是&param78=是&param79=是&param80=是&param81=是&param82=是&param83=是&param84=是&param85=是&param86=100&param87=100&param88=是&param89=是&param90=是&param91=是&param92=是&param93=是&param94=0.5&param95=3000&param96=10兆&param97=50&param98=20&param99=1000毫秒&param100=1&param101=0&param102=2000毫秒&param103=3000毫秒&param104=1000&param105=3000毫秒&param106=100&param107=1000毫秒&param108=1000毫秒")
+        // this.$message.success("提交成功,查看报告");
+      }
+    },
+    //获取检测报告
+    // getExportZPdf(){
+    //   let url = "/portal/datection/exportZPdf";
+    //   let data = {
+    //       title:'',
+    //       describes:this.paramDescribes,
+    //       userName:this.paramUserName,
+    //   };
+    //   HTTP.get(url, data, res => {
+    //     console.log('ZPdf:',res);
+    //     // this.dataList = res.data;
+    //   }, false)
+    // },
     getDetectionList() {
       let ccet = setInterval(() => {
         if (this.resultNum < 100) {
@@ -1931,6 +1937,7 @@ export default {
   },
   created() {
     this.getDetectionList();
+    // this.submitForm()
   }
 }
 </script>
@@ -1945,7 +1952,6 @@ export default {
   padding: .9rem .3rem .4rem;
   display: flex;
   justify-content: center;
-
   span {
     font-size: .3rem;
     padding: 0 50px;
@@ -2635,5 +2641,34 @@ export default {
     background-color: rgba(0, 233, 227, 1);
   }
 }
-
+// 修改弹窗默认样式
+::v-deep .el-dialog{
+  background:rgb(68, 68, 68, 0.94)
+}
+::v-deep .el-dialog__body{
+  color:#51ded2;
+}
+::v-deep .result-con{
+  background-color: rgba(57,212,251,.57)
+}
+::v-deep .result-con[data-v-c573d8ce]:after{
+  border-left: 3px solid #32f8c3;
+  border-right: 3px solid #32f8c3;
+}
+::v-deep .schedule-list{
+  background-color: #32dff8;
+}
+::v-deep .center-con :after{
+  background-color: #32dff8;
+}
+::v-deep .schedule-text{
+  border: 1px solid #32f8c3;
+}
+::v-deep .schedule-body{
+  background-color: #485156;
+  line-height: 23px;
+}
+::v-deep .el-dialog__wrapper{
+  z-index: 991;
+}
 </style>

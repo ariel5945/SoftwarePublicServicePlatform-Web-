@@ -205,7 +205,7 @@ main{
   p{
     //background-color: #FBE251;
     color: #FFFFFF;
-    width: 70px;
+    width: 185px;
     height: 70px;
     display: flex;
     justify-content: center;

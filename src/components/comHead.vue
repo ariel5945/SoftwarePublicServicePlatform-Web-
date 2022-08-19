@@ -263,7 +263,8 @@ header {
   align-items: center;
   padding: 0 .6rem 0 .7rem;
   box-sizing: border-box;
-  z-index: 999;
+  // z-index: 999;
+  z-index:2100;
   -o-user-select: none;
   /// 火狐 firefox /
   -moz-user-select: none;

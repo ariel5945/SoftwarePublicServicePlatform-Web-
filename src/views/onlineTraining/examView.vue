@@ -193,6 +193,7 @@ main{
   display: flex;
   flex-direction: column;
   height: 2.4rem;
+  margin-bottom:0.4rem;
   justify-content: center;
   align-items: center;
   background-color: #3291F8;

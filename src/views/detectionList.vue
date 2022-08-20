@@ -167,8 +167,6 @@
                   <div class="jc-item-num" v-else>
                     {{ tabIndex5 + 1 }}.
                   </div>
-
-
                   <div class="jc-item-text" v-if="tabItem === 0">
                     {{ selectList[tabItem].list[tabIndex1].title }}
                   </div>
@@ -275,9 +273,7 @@
                 <!-- <div @click="getUserOptinon(1)">上一题</div> -->
                 <div v-if="tabIndex1 < selectList[tabItem].list.length-1" @click="getUserOptinon(0)">下一项</div>
                 <!-- <div v-else class="end-btn" @click="jiance()">查看报告</div> -->
-                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish">
-                
-                </div>
+                <div v-if="tabItem<=4 && tabIndex1Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish && tabIndex5Finish"></div>
                 <div v-if="tabItem<=4 && tabIndex1Finish && (!(tabIndex5Finish && tabIndex2Finish && tabIndex3Finish && tabIndex4Finish))" style="background-color: #3291F8"  @click="tabItem += 1">下一类目</div>
               </div>
               <!-- 第二组 -->
@@ -1256,9 +1252,9 @@ export default {
             {title: "产品名称"},
             {title: "公司名称"},
             {title: "项目简介"},
-            // {title: "代码是否正常启动"},
-            // {title: "代码格式是否规范"},
-            // {title: "代码启动后是否崩溃"},
+            {title: "代码是否正常启动"},
+            {title: "代码格式是否规范"},
+            {title: "代码启动后是否崩溃"},
             // {title: "运行代码崩溃次数"},
             // {title: "运行代码警告数量"},
             // {title: "运行代码报错数量"},
@@ -1395,9 +1391,9 @@ export default {
             {title: "产品名称",type: 1},
             {title: "公司名称",type: 1},
             {title: "项目简介",type: 1},
-            // {title: "代码是否正常启动", type: 0},
-            // {title: "代码格式是否规范", type: 0},
-            // {title: "代码启动后是否崩溃", type: 0},
+            {title: "代码是否正常启动", type: 0},
+            {title: "代码格式是否规范", type: 0},
+            {title: "代码启动后是否崩溃", type: 0},
             // {title: "运行代码崩溃次数", type: 1},
             // {title: "运行代码警告数量", type: 1},
             // {title: "运行代码报错数量", type: 1},
@@ -1673,7 +1669,11 @@ export default {
         if (!this.tabIndexVal) {
           return false
         }
-          if(this.indexOf == 0){
+
+        if (this.tabItem === 0) {
+          this.selectList[this.tabItem].list[this.tabIndex1].value = this.tabIndexVal;
+
+           if(this.indexOf == 0){
             this.paramList += "?title="+this.tabIndexVal;
            }
            if(this.indexOf == 1){
@@ -1686,27 +1686,22 @@ export default {
             this.paramList += "&param"+(this.indexOf-2)+"="+this.tabIndexVal+'';
            }
            this.indexOf ++;
-            // this.paramTitle = this.tabIndexVal;
-            // this.paramDescribes = this.tabIndexVal;
-            // this.paramUserName = this.tabIndexVal;
-        console.log('paramList:',this.paramList)
-
-        if (this.tabItem === 0) {
-          this.selectList[this.tabItem].list[this.tabIndex1].value = this.tabIndexVal;
-           console.log('tabIndex1:',this.tabIndexVal)
-           
-           
+          console.log('paramList1:',this.paramList)
           if (this.tabIndex1 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex1 += 1;
             if (this.tabItem === 0 && this.selectList[this.tabItem].list[this.tabIndex1].value) {
               this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex1].value;
-              
             }
           }
         } else if (this.tabItem === 1) {
           this.selectList[this.tabItem].list[this.tabIndex2].value = this.tabIndexVal;
           console.log('tabIndex2:',this.tabIndexVal)
+          // 新改的内容
+          this.paramList += "&param"+(this.indexOf)+"="+this.tabIndexVal+'';
+          this.indexOf ++;
+          console.log('paramList2:',this.paramList)
+
           if (this.tabIndex2 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex2 += 1;
@@ -1717,6 +1712,11 @@ export default {
         } else if (this.tabItem === 2) {
           this.selectList[this.tabItem].list[this.tabIndex3].value = this.tabIndexVal;
           console.log('tabIndex3:',this.tabIndexVal)
+          // 新改的内容
+         this.paramList += "&param"+(this.indexOf)+"="+this.tabIndexVal+'';
+          this.indexOf ++;
+          console.log('paramList3:',this.paramList)
+
           if (this.tabIndex3 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex3 += 1;
@@ -1727,6 +1727,11 @@ export default {
         } else if (this.tabItem === 3) {
           this.selectList[this.tabItem].list[this.tabIndex4].value = this.tabIndexVal;
           console.log('tabIndex4:',this.tabIndexVal)
+          // 新改的内容
+          this.paramList += "&param"+(this.indexOf)+"="+this.tabIndexVal+'';
+          this.indexOf ++;
+          console.log('paramList4:',this.paramList)
+          
           if (this.tabIndex4 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex4 += 1;
@@ -1737,6 +1742,11 @@ export default {
         } else if (this.tabItem === 4) {
           this.selectList[this.tabItem].list[this.tabIndex5].value = this.tabIndexVal;
           console.log('tabIndex5:',this.tabIndexVal)
+          // 新改的内容
+          this.paramList += "&param"+(this.indexOf)+"="+this.tabIndexVal+'';
+          this.indexOf ++;
+          console.log('paramList5:',this.paramList)
+
           if (this.tabIndex5 < this.selectList[this.tabItem].list.length - 1) {
             this.tabIndexVal = "";
             this.tabIndex5 += 1;
@@ -1746,35 +1756,35 @@ export default {
           }
         }
       } 
-      else if (type === 1) {
-        if (this.tabItem === 0) {
-          if (this.tabIndex1 > 0) {
-            this.tabIndex1 -= 1;
-          }
-          this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex1].value;
-        } else if (this.tabItem === 1) {
-          if (this.tabIndex2 > 0) {
-            this.tabIndex2 -= 1;
-          }
-          this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex2].value;
-        } else if (this.tabItem === 2) {
-          if (this.tabIndex3 > 0) {
-            this.tabIndex3 -= 1;
-          }
-          this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex3].value;
-        } else if (this.tabItem === 3) {
-          if (this.tabIndex4 > 0) {
-            this.tabIndex4 -= 1;
-          }
-          this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex4].value;
-        } else if (this.tabItem === 4) {
-          if (this.tabIndex5 > 0) {
-            this.tabIndex5 -= 1;
-          }
-          this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex5].value;
-        }
+      // else if (type === 1) {
+      //   if (this.tabItem === 0) {
+      //     if (this.tabIndex1 > 0) {
+      //       this.tabIndex1 -= 1;
+      //     }
+      //     this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex1].value;
+      //   } else if (this.tabItem === 1) {
+      //     if (this.tabIndex2 > 0) {
+      //       this.tabIndex2 -= 1;
+      //     }
+      //     this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex2].value;
+      //   } else if (this.tabItem === 2) {
+      //     if (this.tabIndex3 > 0) {
+      //       this.tabIndex3 -= 1;
+      //     }
+      //     this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex3].value;
+      //   } else if (this.tabItem === 3) {
+      //     if (this.tabIndex4 > 0) {
+      //       this.tabIndex4 -= 1;
+      //     }
+      //     this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex4].value;
+      //   } else if (this.tabItem === 4) {
+      //     if (this.tabIndex5 > 0) {
+      //       this.tabIndex5 -= 1;
+      //     }
+      //     this.tabIndexVal = this.selectList[this.tabItem].list[this.tabIndex5].value;
+      //   }
 
-      }
+      // }
     },
 
     getTabId(type){
